@@ -1,0 +1,19 @@
+% Chapter 1
+\chapter{Definición del problema u oportunidad} % Main chapter title
+\label{sec:problema} % For referencing the chapter elsewhere, use
+
+\section{Problema}
+Por un lado, el método de planificación de la ruta de Simpliroute considera el uso de una heurística de tiempo que no permite capturar la complejidad de la red vial, lo que genera rutas que no se ajustan a la realidad de los conductores. Por otro lado, los conductores no solo consideran el tiempo de viaje como una varible en su toma de decisiones, sino que también poseen un conocimiento tácito de la red vial que les permite tomar decisiones informadas y adaptarse a las condiciones cambiantes del tráfico y la infraestructura.
+
+En base a lo anterior, este fenómeno se traduce en una severa degradación de la adherencia a la ruta planificada. Así, en las operaciones reales de la plataforma, un análisis identificó  que la tasa de adherencia de los conductores a la secuencia exacta de clientes propuesta por el optimizador alcanza apenas un 14.19\% \cite{rubiocarrasco2025mejora}. 
+
+\subsection{Análisis de las Causas Basado en la Literatura}
+La causa fundamental de esta baja adherencia radica en una limitación del modelamiento tradicional, los motores de ruteo estándar operan bajo un esquema monocriterio determinista que asume que el conductor es un agente pasivo que obedecerá ciegamente la ruta más corta en tiempo teórico. Sin embargo, los operadores humanos acumulan un conocimiento tácito de la red vial que aplican activamente en ruta para evadir fricciones físicas u operacionales que el software no visualiza. 
+
+Esta hipótesis causal ya ha sido tema que han tenido otras empresas, como es posible observar por el desafío que liberó Amazon, el cual publicó 6112 rutas de sus base de datos para que sea posible resolver el problema. Donde, se detalla principalmente que el problema radica en que los modelos matemáticos no han sido capaces de capturar este conocimiento tácito de los conductores \cite{merchan20242021}.
+
+Más aún, uno de los equipos participantes se dedicó a analizar los datos empíricos de la industria, donde demostraron que las rutas ejecutadas por conductores reales son, en promedio, un 12.9\%  más largas en tiempo de viaje que el óptimo teórico\cite{cook2022constrained}. En consecuencia, este hallazgo evidencia que los operadores humanos no minimizan de forma lineal el tiempo de trayecto, sino que guían sus decisiones bajo criterios implícitos y conocimiento tácito como la facilidad de navegación y la familiaridad con el entorno.
+
+
+\subsection{Pregunta de Investigación}
+En base a los antecedentes expuestos, la presente investigación busca responder a la siguiente interrogante ¿Cómo se pueden modelar e integrar las preferencias operacionales latentes de los conductores, inferidas a partir de las discrepancias entre rutas planificadas y trazas GPS históricas, para lograr una mayor adherencia del motor de optimización vehicular?

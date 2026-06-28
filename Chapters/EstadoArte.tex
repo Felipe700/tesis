@@ -1,0 +1,39 @@
+% Chapter 1
+
+\chapter{Estado del arte} % Main chapter title
+\label{sec:Estado Arte} % For referencing the chapter elsewhere, use
+
+\section{Revisión Bibliográfica y Estado del Arte}
+
+La literatura científica contemporánea en logística de última milla ha transitado desde modelos prescriptivos hacia marcos adaptativos basados en datos. Así, estos enfoques modernos buscan capturar la incertidumbre del entorno urbano, las dinámicas operacionales complejas y el conocimiento tácito humano a través de un historial de datos pasados. De manera que, para fundamentar metodológicamente esta investigación, el estado del arte se divide en tres pilares esenciales. Primero, el aprendizaje utilizando bandidos multibrazo, luego la inferencia de preferencias multi-objetivo y el modelamiento de secuencias micro a través de penalizaciones.
+
+\subsection{Aprendizaje en Línea de Tiempos de Viaje mediante Bandidos Multibrazo Combinatorios}
+
+Una vertiente fundamental de la literatura aborda el problema desde la perspectiva del aprendizaje adaptativo de la red de transporte en escenarios donde el operador logístico posee información limitada o estocástica sobre los tiempos reales de viaje \cite{lagos2024online}. Por lo tanto, \cite{lagos2024online} formalizan el Problema del camino más corto modelándolo matemáticamente como un problema de bandidos multibrazo combinatorios (CMAB) bajo un entorno de retroalimentación de tipo semibandit. Bajo este esquema, el planificador recolecta de forma directa las realizaciones puntuales de los tiempos de viaje de cada arco individual perteneciente al camino ejecutado por la flota \cite{lagos2024online}. Asimismo, esta metodología consta de dos fases, entre exploración y explotación basado en el algoritmo de thompson sampling.
+
+
+ \subsection{Enfoques Predictivos-Prescriptivos y Aprendizaje de Preferencias Multi-Objetivo}
+
+Una línea de investigación complementaria se enfoca en el aprendizaje de preferencias a nivel macro, donde \cite{nourmohammadi2025data} introducen un enfoque de optimización guiado por datos para inferir implícitamente las ponderaciones de las funciones objetivo en un Problema de Ruteo Vehicular Capacitado con Ventanas de Tiempo Multi-Objetivo (MO-CVRPTW). A diferencia de los métodos de Optimización Inversa (IO), los cuales suelen operar sin interpretación clara. 
+
+Así, este marco utiliza la escalarización y normalización de objetivos, para resolver la  \cite{nourmohammadi2025data}disparidad de escalas numéricas entre las distintas métricas de las funciones objetivos. Luego, tras evaluar estadísticamente un conjunto de escenarios históricos, los autores demostraron que las preferencias tomadores de decisiones logísticas se concentran en tres objetivos principales, la minimización de distancia total de viaje, la minimización del tamaño de la flota utilizada y el balance de carga de trabajo. Finalmente, utilizan el algoritmo de bosques aleatorios(RF) para predecir las funciones objetivos a partir de las características intrínsecas de las intancias de entrega, eliminando la necesidad de compilar el motor de optimización en cada exploración de pesos. \cite{nourmohammadi2025data}.
+Pero, una premisa fundamental de este enfoque es asumir de la homogeneidad en las preferencias de la flota, es decir, el modelo no busca parametrizar el comportamiento aislado de cada conductor, sino capturar la visión unificada del tomador de decisiones. \cite{nourmohammadi2025data}.
+
+\subsection{Búsqueda Local Restringida Basada en Penalizaciones Jerárquicas}
+
+Un hito fundamental en el modelamiento del comportamiento del conductor a nivel micro (secuenciación de paradas) fue establecido poner cita, quienes desarrollaron el algoritmo LKH-AMZ para competir en el Amazon Last Mile Routing Research Challenge de 2021 \cite{merchan20242021}. Donde, los autores abordan el problema de la secuencia detallada de un único vehículo tratándolo formalmente como un Problema del Vendedor Viajero Asimétrico (ATSP) \cite{cook2022constrained}. 
+Para aproximar las soluciones teóricas a las decisiones reales, los autores propusieron un enfoque basado en la optimización local restringida por penalizaciones \cite{cook2022constrained}.
+
+El algoritmo LKH-AMZ obtuvo el primer lugar global de la competencia al alcanzar un score de 0.0248 frente a los datos ocultos de Amazon, demostrando alta eficiencia computacional al procesar instancias complejas en fracciones de segundo \cite{cook2022constrained}.
+
+\subsection{Brecha de Conocimiento}
+
+A partir de la revisión sistemática de la literatura se constatan tres limitaciones críticas en los enfoques actuales para resolver la baja adherencia en la última milla:
+
+Por un lado, la metodología de \cite{cook2022constrained} modela el conocimiento tácito penalizando las secuencias según la estructuración geográfica intrínseca de los datos de Amazon. Sin embargo, este enfoque posee una dependencia absoluta del atributo de zonas, imposibilitando su aplicación en contextos comerciales locales (como Simpliroute) donde las bodegas y manifiestos de carga no cuentan con zonificaciones preestablecidas de fábrica.
+
+Por otra parte, los marcos avanzados de aprendizaje en línea para transporte, tales como los Bandidos Multibrazo Combinatorios (CMAB), han demostrado alta eficiencia para aprender dinámicas de tráfico en redes urbanas bajo incertidumbre \cite{lagos2024online}. Pero, su aplicación directa a la última milla es compleja, ya que estos modelos están diseñados para la optimización de un único par origen-destino (OSPP) en entornos de exploración activa, siendo incapaces de incorporar restricciones complejas de secuenciación de múltiples paradas (VRP) y ventanas de tiempo, ni de explotar de forma pasiva el conocimiento histórico de trazas GPS preexistentes de la flota.
+
+Finalmente, los enfoques híbridos predictivos-prescriptivos orientados al aprendizaje de preferencias multi-objetivo en plataformas, como el de \cite{nourmohammadi2025data}, logran inferir pesos globales del sistema bajo supuestos de homogeneidad en la flota \cite{nourmohammadi2025data}.
+
+Por tanto, existe la necesidad evidente de formular un marco que adapte los principios de aprendizaje secuencial y estocástico, como las característicos de los bandidos combinatorio, para operar sobre decisiones secuenciales discretas (VRP), utilizando de forma pasiva las trazas GPS históricas para inferir las preferencias y agrupaciones latentes de la flota, identificando si es necesario o no prescindir o no de metadatos de zonificación.
