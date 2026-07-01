@@ -1,7 +1,6 @@
 % Chapter 1
 
 \chapter{Estado del arte} % Main chapter title
-\label{sec:Estado Arte} % For referencing the chapter elsewhere, use
 
 \section{Revisión Bibliográfica y Estado del Arte}
 
@@ -14,17 +13,76 @@ La literatura científica contemporánea en logística de última milla ha trans
 
 
 Ahora bien, para resolver este problema en el contexto de Simpliroute se requiere considerar tres aspectos clave. Primero, heterogeneidad individual, es decir, la diferencia en el comportamiento de los conductores frente a la misma trayectoría no es la misma, donde idealmente se pueda aprender el perfil único de cada conductor, no un promedio de la zona. Segundo, lograr una escalabilidad, debe funcionar con una gran cantidad de carteras de clientes que cambian todos los días y trazas GPS dispersas. Y, por último, reinyectabilidad operacional, donde el resultado sea directamente consumible por el motor de optimización de Simpliroute.
+\subsection{Aprendizaje en Línea de Tiempos de Viaje mediante Bandidos Multibrazo Combinatorios}
+ 
+Una vertiente fundamental de la literatura aborda el problema desde la perspectiva
+del aprendizaje adaptativo de la red de transporte, en escenarios donde el operador
+logístico posee información limitada o estocástica sobre los tiempos reales de
+viaje \cite{lagos2024online}. Es decir, en términos simples, un bandido
+multibrazo es un modelo de decisión secuencial en el que un agente tiene dos fases, una de exploración y otra de explotación \cite{robbins1952some}. Por un lado, en la fase de exploración, el agente debe elegir repetidamente entre distintas alternativas, sin conocer de antemano cuál es la mejor, aprendiendo únicamente a partir de la retroalimentación que recibe después de cada elección. Por otro lado, en la fase de explotación, el agente utiliza la información aprendida para tomar decisiones óptimas. 
+ 
+Así, \citet{lagos2024online} formalizan el problema del camino más corto modelándolo como un problema de bandidos multibrazo combinatorios (CMAB)
+bajo un entorno de retroalimentación de tipo semibandit. En este caso, cada arco de la red vial actúa como un brazo cuyo tiempo de viaje real solo se revela después de haber sido recorrido. Donde, la metodología  de exploración y explotación son basadas en el algoritmo de Thompson sampling.
 
+\subsection{Enfoques Predictivos-Prescriptivos y Aprendizaje de Preferencias Multi-Objetivo}
+ 
+Una línea de investigación complementaria se enfoca en el aprendizaje de
+preferencias a nivel macro, es decir, a nivel del conjunto completo de decisiones
+de una plataforma logística en lugar de a nivel de un conductor individual.
+Nourmohammadi, Hu, Rey y Saberi (2025) introducen un enfoque de optimización guiado
+por datos para inferir implícitamente las ponderaciones de las funciones objetivo
+en un Problema de Ruteo Vehicular Capacitado con Ventanas de Tiempo Multi-Objetivo
+(MO-CVRPTW). A diferencia de los métodos de Optimización Inversa (IO) —que se
+detallan en la sección~\ref{subsec:optimizacion-inversa} y que suelen operar sin
+una interpretación clara de los pesos aprendidos—, este marco utiliza
+escalarización y normalización de objetivos para resolver la disparidad de escalas
+numéricas entre las distintas métricas de las funciones objetivo.
+ 
+Tras evaluar estadísticamente un conjunto de escenarios históricos, los autores
+demostraron que las preferencias de los tomadores de decisiones logísticas se
+concentran en tres objetivos principales: la minimización de la distancia total de
+viaje, la minimización del tamaño de la flota utilizada y el balance de la carga de
+trabajo. Posteriormente, utilizan el algoritmo de bosques aleatorios (RF) para
+predecir las funciones objetivo a partir de las características intrínsecas de las
+instancias de entrega, eliminando la necesidad de recompilar el motor de
+optimización en cada exploración de pesos. Una premisa fundamental de este enfoque,
+sin embargo, es asumir homogeneidad en las preferencias de la flota: el modelo no
+busca parametrizar el comportamiento aislado de cada conductor, sino capturar la
+visión unificada del tomador de decisiones.
+ 
+
+------------------------------------------------------------
+\subsection{Búsqueda Local Restringida Basada en Penalizaciones Jerárquicas}
+ 
+Un hito fundamental en el modelamiento del comportamiento del conductor a nivel
+micro —es decir, en la secuenciación detallada de paradas dentro de una ruta ya
+asignada— fue establecido por Cook, Held y Helsgaun (2024), quienes desarrollaron
+el algoritmo LKH-AMZ para competir en el Amazon Last Mile Routing Research
+Challenge de 2021 (Merchán y cols., 2024). Los autores abordan el problema de la
+secuencia detallada de un único vehículo tratándolo formalmente como un Problema
+del Vendedor Viajero Asimétrico (ATSP, por su sigla en inglés): una variante del
+clásico problema del vendedor viajero en la que el costo de ir de un punto $A$ a un
+punto $B$ no necesariamente es igual al costo de ir de $B$ a $A$, lo cual refleja
+de forma más realista las restricciones de tránsito urbano (calles de un solo
+sentido, giros prohibidos, congestión asimétrica).
+ 
+Para aproximar las soluciones teóricas a las decisiones reales, los autores
+propusieron un enfoque de optimización local restringida por penalizaciones: en
+lugar de minimizar exclusivamente la distancia o el tiempo de viaje, el algoritmo
+penaliza las secuencias que se alejan de los patrones de zonificación geográfica
+observados históricamente en los datos de Amazon. El algoritmo LKH-AMZ obtuvo el
+primer lugar global de la competencia, alcanzando un \textit{score} de 0.0248
+frente a los datos ocultos de Amazon, y demostró además una alta eficiencia
+computacional al procesar instancias complejas en fracciones de segundo.
+  
 \subsection{Aprendizaje de Preferencias Implícitas mediante Modelos Probabilísticos de Transición}
-En la práctica logística, un planificador experimentado rara vez acepta sin modificaciones la ruta que propone un software de optimización: la ajusta según su conocimiento del terreno, la historia de cada cliente y las restricciones tácitas que ha aprendido con el tiempo. Un sistema que pueda aprender esas modificaciones de forma automática, sin que el planificador deba articular explícitamente sus razones, representaría una mejora significativa para la adherencia operacional.
+En la práctica logística, un planificador experimentado rara vez acepta sin modificaciones la ruta que propone un software de optimización, la ajusta según su conocimiento del terreno, la historia de cada cliente y las restricciones tácitas que ha aprendido con el tiempo. Un sistema que pueda aprender esas modificaciones de forma automática, sin que el planificador deba articular explícitamente sus razones, representaría una mejora significativa para la adherencia operacional que buscamos resolver.
 
-Con ese objetivo, Canoy, Bucarey, Mandi y Guns (2023) proponen un marco de aprendizaje de preferencias implícitas para el VRP basado en un modelo de transición markoviano entre paradas. La idea central consiste en reemplazar la matriz de distancias del solver VRP por una \textit{matriz de probabilidades de transición} estimada a partir de las rutas manuales históricas: cuanto más frecuentemente un planificador haya encadenado la parada AA
-A con la parada BB
-B en el pasado, mayor será la probabilidad de transición de AA
-A hacia BB
-B en el modelo. Esta matriz aprendida se integra directamente con la infraestructura de optimización existente, combinando el criterio objetivo de distancia con el criterio subjetivo de preferencia, sin necesidad de reformular matemáticamente el VRP subyacente. En su validación sobre datos reales de una empresa de transporte, los autores demuestran que las rutas generadas con la matriz aprendida se acercan sistemáticamente más a las soluciones manuales del planificador que las rutas puramente basadas en distancias, incluso ante cambios en el conjunto de clientes.
+Con ese objetivo, \cite{canoy2023learn} proponen un marco de aprendizaje de preferencias implícitas para el VRP basado en un modelo de transición markoviano entre paradas. Donde, la idea central consiste en reemplazar la matriz de distancias del solver VRP por una estimada a partir de las rutas manuales históricas. cuanto más frecuentemente un planificador haya encadenado la parada entonces será mayor la probabilidad de transición a esa zona de la parada. 
 
-No obstante, este enfoque presenta una limitación fundamental en el contexto de SimpliRoute. El modelo captura la co-ocurrencia histórica entre arcos, pero no la causa subyacente de cada preferencia. Si dos conductores distintos han encadenado con frecuencia las mismas paradas por razones completamente diferentes —uno por familiaridad con el sector, otro por una restricción horaria implícita de un cliente— el modelo agrega ambos patrones sin distinguirlos. Esta mezcla de motivos heterogéneos deteriora la calidad de la predicción cuando distintos conductores operan sobre la misma cartera de clientes, situación habitual en la operación diaria de SimpliRoute.
+Ahora bien, esta matriz aprendida se integra directamente con la infraestructura de optimización existente, combinando el criterio objetivo de distancia con el criterio subjetivo de preferencia, sin necesidad de reformular matemáticamente el VRP subyacente. En su validación sobre datos reales de una empresa de transporte, los autores demuestran que las rutas generadas con la matriz aprendida se acercan sistemáticamente más a las soluciones manuales del planificador que las rutas puramente basadas en distancias, incluso ante cambios en el conjunto de clientes.
+
+No obstante, este enfoque presenta una limitación fundamental en el contexto de SimpliRoute. Ya que, el modelo captura la ocurrencia histórica entre arcos, pero no la causa subyacente de cada preferencia. De manera que, si dos conductores distintos han encadenado con frecuencia las mismas paradas por razones completamente diferentes, entonces el modelo agrega ambos patrones sin distinguirlos. Por lo tanto, esta mezcla de motivos heterogéneos deteriora la calidad de la predicción cuando distintos conductores operan sobre la misma cartera de clientes.
 
 
 \subsection{Optimización Inversa Aplicada al Ruteo de Vehículos}
