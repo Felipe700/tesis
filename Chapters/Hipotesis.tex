@@ -1,4 +1,23 @@
 \chapter{Hipótesis y objetivos} % Main chapter title
 \label{sec:Hipotesis} % For referencing the chapter elsewhere, use
 
-La tesis deberá tener hipótesis y/o objetivos (general y específicos). Discutir con su profesor guía para más detalles.
+
+ 
+ 
+Si la función de costo del motor de optimización de SimpliRoute se ajusta con un vector de preferencias inferido de forma individual para cada conductor, a partir de la discrepancia entre las rutas planificadas y las trazas GPS históricas, entonces la adherencia a la secuencia de paradas planificada aumenta respecto de la planificación actual, cuya tasa de referencia es de un 14,19\%.
+
+ 
+\section{Objetivo general}
+ 
+Desarrollar un marco metodológico que infiera las preferencias individuales de los conductores de SimpliRoute, a partir de la discrepancia entre las rutas planificadas y las trazas GPS históricas, que distinga el efecto estructural de la asignación de zona del efecto personal, y que integre dichas preferencias en el motor de optimización de ruteo con el fin de incrementar la adherencia a la secuencia de paradas planificada.
+ 
+\section{Objetivos específicos}
+ 
+\begin{enumerate}
+    \item Caracterizar y cuantificar la discrepancia entre las rutas planificadas por SimpliRoute y las trazas GPS ejecutadas por los conductores, estableciendo la línea base de adherencia y las métricas de evaluación.
+    \item Formular un modelo que infiera un perfil de preferencias a nivel individual para cada conductor a partir de dicha discrepancia.
+    \item Incorporar al modelo un mecanismo que separe el efecto estructural de la zona del efecto personal del conductor.
+    \item Integrar las preferencias inferidas en el motor de optimización, ya sea como una reponderación de la función de costo o como una restricción blanda aprendida, sin requerir el rediseño del sistema de ruteo.
+    \item Evaluar el incremento de adherencia del enfoque propuesto respecto de la planificación actual y respecto de un modelo de preferencias agregadas, utilizando las métricas definidas en el primer objetivo.
+\end{enumerate}
+ 
